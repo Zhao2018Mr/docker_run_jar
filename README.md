@@ -1,2 +1,68 @@
-# docker_run_jar
-docker_run_jar  dockerç›´æ¥åœ¨å®¹å™¨ä¸­è¿è¡Œ jaråŒ…
+# Ò»¡¢dockerfile ÎÄ¼şÈçÏÂ
+```bash
+FROM openjdk:8-jre
+
+MAINTAINER zyj
+# ĞÂ½¨Ä¿Â¼
+RUN mkdir /opt/jar/
+# °Ñjar°ü¸´ÖÆ½øÈ¥
+# ĞèÒª¸ÄÎªÄãÔËĞĞµÄjar°üÃû³Æ
+ADD springboot_demo.jar /opt/jar/
+
+#Ê±Çø 
+RUN echo "Asia/Shanghai" > /etc/timezone
+
+RUN mv /etc/localtime /etc/localtime_bak
+
+RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+EXPOSE 8080
+
+WORKDIR /opt/
+
+# Launch JAVA
+# ĞèÒª¸ÄÎªÄãÔËĞĞµÄjar°üÃû³Æ
+CMD ["java", "-jar","/opt/jar/springboot_demo.jar"]
+```
+# ¶ş¡¢Ê¹ÓÃdockerÃüÁî´ò°ü±àÒë
+```bash
+docker build -f dockerfile -t zyj/springboot .
+```
+# Èı¡¢ÔËĞĞ
+```bash
+docker run -d -p 8080:8080 --name springboot zyj/springboot 
+```
+######  Èç¹û ÌáÊ¾ 
+```bash
+WARNING: IPv4 forwarding is disabled. Networking will not work.
+```
+Ôò ÔÚËŞÖ÷»úÆ÷ÉÏÖ´ĞĞÒÔÏÂ´úÂë 
+```bash
+vi /etc/sysctl.conf
+#Ìí¼Ó 
+net.ipv4.ip_forward=1
+#ÖØÆônetwork·şÎñ
+systemctl restart network
+#²é¿´ÊÇ·ñĞŞ¸Ä³É¹¦
+sysctl net.ipv4.ip_forward
+#Èç¹û·µ»ØÎª¡°net.ipv4.ip_forward = 1¡±Ôò±íÊ¾³É¹¦ÁË
+```
+
+# ËÄ¡¢ÔÚÍøÒ³ÉÏ¾Í¿ÉÒÔ´ò¿ªÁË
+
+ [http://localhost:8080/](http://localhost:8080/)
+
+# Îå¡¢Èç¹ûÒª²é¿´ÈÕÖ¾ 
+```bash
+docker exec -it springboot /bin/bash 
+
+cd /opt/jar/logs/
+ls
+```
+# Áù¡¢githubµØÖ·
+
+ [https://github.com/Zhao2018Mr/docker_run_jar](https://github.com/Zhao2018Mr/docker_run_jar)
+
+# CSDN µØÖ· 
+
+ [https://blog.csdn.net/qq_31807569/article/details/90475094](https://blog.csdn.net/qq_31807569/article/details/90475094)
